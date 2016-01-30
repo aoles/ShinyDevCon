@@ -1,0 +1,65 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin-ext,latin);
+pre {
+  line-height: 21px;
+  background-color: rgb(232, 232, 232);
+}
+code {
+  color: rgb(80, 80, 80);
+  background-color: rgb(232, 232, 232);
+  font-size: 90%;
+}
+iframe {
+  width: 100%;
+  margin-top: -20px;
+}
+.title-slide {
+  background-image: url("./images/shinyurl.png");
+  background-repeat: no-repeat;
+  background-position: 80px 60px;
+}
+.title-slide hgroup h1 {
+  color: #1a81c2;
+  font-size: 48px;
+  letter-spacing: -2px;
+  margin-right: 120px;
+}
+.title-slide hgroup p {
+    font-size: 28px;
+    color: rgb(0,0,0);
+}
+h2 {
+  color: #87b13f;
+}
+h3 {
+  color: #f08000;
+  font-weight: bold;
+}
+slides > slide {
+    color: rgb(0,0,0);
+}
+label {
+  font-size: 150%;
+}
+slides.layout-widescreen > slide {
+  width: 1024px;
+  margin-left: -512px;
+}
+pre.prettyprint+img, p+img {
+  margin: -10px 0px 20px 0px;
+}
+pre.prettyprint+pre {
+  margin-top:-20px;
+}
+.orange {
+  color: #f08000;
+}
+.blue {
+  color: #1a81c2;
+  font-weight: bold;
+}
+.twitter:before {
+  content: url("./images/twitter.png");
+  vertical-align: middle;
+  padding-left: 1ex;
+  padding-right: .5ex;
+}

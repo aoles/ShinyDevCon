@@ -1,0 +1,163 @@
+---
+title: "shinyURL: save and restore the state of your Shiny app easily"
+author: "Andrzej K. Oleś <span class=twitter>@andrzejkoles</span>"
+date: "January 30, 2016 -- Shiny Developer Conference"
+output:
+  ioslides_presentation:
+    fig_retina: null
+    css: style.css
+    widescreen: true
+runtime: shiny
+---
+<style scoped>
+ul > li:before {
+    content: "•";
+    color: #1a81c2;
+    vertical-align: middle;
+    font-family: "Arial Black";
+    font-weight: 900;
+    margin-left: -.85em;
+}
+</style>
+
+<!--<img src="./images/twitter.png"/>-->
+
+
+## Sharing a particular view state of an app
+
+<table width="100%" style="border-spacing: 50px; border-collapse: separate; margin: -50px auto;">
+<tr>
+<td style="vertical-align: top; padding-top: 1em">
+### Problem
+No build-in mechanism in Shiny for saving and restoring the state of user inputs
+</td>
+<td><img src="./images/question.png" width="200" /></td>
+</tr><tr>
+<td style="vertical-align: top; padding-top: 1em">
+### Solution
+Encode widget values in the app's URL
+</td>
+<td><img src="./images/puzzle.png" width="200" /></td>
+</tr>
+</table>
+
+
+## shinyURL R package
+
+- resume an app from a previous state
+- lightweight and easy-to-use
+- share your findings via URL
+
+<div style="position: absolute; bottom: 100px; right: 100px;"> <img src="./images/shinyurl.png" height="250" width="250" /></div>
+
+### Features
+
+- supports all Shiny widgets, including
+    - tabsets, navbars
+    - dynamically rendered UIs
+- TinyURL query button
+- copy-to-clipboard button
+
+<br/><img src="./images/github.png" style="vertical-align: middle; padding-right: .5ex;"/>
+[github.com/aoles/shinyURL](https://github.com/aoles/shinyURL)
+
+
+## shinyURL -- demo
+
+```{r, echo=FALSE}
+  library(shinyURL)
+
+  shinyApp(
+    ui = fluidPage(
+      titlePanel("Old Faithful Geyser Data"),
+      sidebarLayout(
+        sidebarPanel(
+          selectInput("var", "Variable:", list(`Eruption time` = "eruptions", `Waiting time` = "waiting")),
+          sliderInput("bins", "Number of bins:", min = 1,  max = 50, value = 30),
+          shinyURL.ui(ZeroClipboard.swf = "//cdn.jsdelivr.net/zeroclipboard/2.2.0/ZeroClipboard.swf")
+        ),
+        mainPanel(
+          tabsetPanel(id = "tab", 
+          tabPanel("Plot", plotOutput("plot")), 
+          tabPanel("Summary", verbatimTextOutput("summary"))
+        )
+        )
+      )
+    ),
+    server = function(input, output) {
+      shinyURL.server()
+      data <- reactive(faithful[, input$var])
+      output$plot <- renderPlot({
+        x <- data()
+        bins <- seq(min(x), max(x), length.out = input$bins + 1)
+        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+      })
+      output$summary <- renderPrint(summary(data()))
+    }
+  )
+```
+
+
+## shinyURL -- use
+
+<span class="blue">1.</span> Load the package in both **server.R** and **ui.R**
+
+        library("shinyURL")
+
+<span class="blue">2.</span> **server.R**: add inside the server function a call to
+    
+        shinyURL.server()
+
+<span class="blue">3.</span> **ui.R**: add the shinyURL widget
+
+        shinyURL.ui()
+
+
+## shinyURL -- implementation
+
+### Initialization from URL
+
+- process `session$clientData$url_search` using `parseQueryString()`
+- match against `session$input`
+- use `class` when setting widgets
+
+### URL encoding
+
+- expand vectors into `name[i]=value`
+- comma-separated range vectors
+- integer dates, short T/F notation
+
+### Copy to clipboard
+
+zeroClipboard JavaScript library
+        
+
+## shinyURL -- limitations
+
+### URL length
+
+- avoid long names, use short IDs
+- use named lists for the argument `choices` in `radioButtons()`, `checkboxGroupInput()`, and `selectInput()`
+
+### Action buttons
+
+Operations performed using action buttons cannot be reliably recorded and restored
+
+### User data
+
+Uploaded data, e.g. via `fileInput()`, gets discarded
+
+
+## Acknowledgments
+
+<div class="centered" style="margin-top: -20px;">
+
+<span style="font-size: 120%">Huber Group @<img src="./images/embl.png" style="vertical-align: middle; padding: 0px 10px 5px;"/> Heidelberg, Germany<span>
+<img src="./images/groupretreat2015.jpg" height="350"/>
+
+<div>
+<img src="./images/radiant.png" style="vertical-align: middle; padding: 0 1em;"/>
+<img src="./images/systemsm.png" style="vertical-align: middle; padding: 0 1em;"/>
+</div>
+
+</div>
