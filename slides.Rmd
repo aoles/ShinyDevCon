@@ -157,6 +157,7 @@ Uploaded data, e.g. via `fileInput()`, gets discarded
 
 <div>
 <img src="./images/radiant.png" style="vertical-align: middle; padding: 0 1em;"/>
+<img src="./images/bmbf.png" height="80" style="vertical-align: middle; padding: 0 1em;"/>
 <img src="./images/systemsm.png" style="vertical-align: middle; padding: 0 1em;"/>
 </div>
 
